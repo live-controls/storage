@@ -8,11 +8,17 @@ use LiveControls\Utils\Utils;
 
 class ObjectStorageHandler
 {
-    protected static $disk = 'contabo';
+    protected static $disk;
     protected static $throwException = true;
 
     private static function check(): bool
     {
+        if(is_null(static::$disk)){
+            static::$disk = config('livecontrols_storage.storage_disk',null);
+            if(is_null(static::$disk)){
+                throw new Exception('You need to set a disk inside config/livecontrols_storage.php or publish the configuration file!');
+            }
+        }
         $drvr = config('filesystems.disks.'.static::$disk.'.driver');
         if(is_null($drvr)){
             if(static::$throwException){
