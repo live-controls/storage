@@ -4,7 +4,7 @@ namespace LiveControls\Storage;
 
 use Exception;
 use Illuminate\Support\Facades\Storage;
-use Helvetiapps\LiveControls\Utils\Utils;
+use LiveControls\Utils\Utils;
 
 class ObjectStorageHandler
 {
