@@ -1,6 +1,6 @@
 # Storage
- ![Release Version](https://img.shields.io/github/v/release/live-controls/payment)
- ![Packagist Version](https://img.shields.io/packagist/v/live-controls/payment?color=%23007500)
+ ![Release Version](https://img.shields.io/github/v/release/live-controls/storage)
+ ![Packagist Version](https://img.shields.io/packagist/v/live-controls/storage?color=%23007500)
  
  Object Storage Library for live-controls
 
