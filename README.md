@@ -4,6 +4,15 @@
  
  Object Storage Library for live-controls
 
+## Requirements
+- PHP 8.0+
+- S3 compatible Object Storage Hoster like Contabo or DigitalOcean
+
+
+## Translations
+None
+
+
 ## Installation
 ```
 composer require live-controls/storage
