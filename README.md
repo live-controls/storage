@@ -22,6 +22,7 @@ composer require live-controls/storage
 ## Setup
 1) Add to .env:
 ```
+OBJECTSTORAGE_ACCESS_KEY_ID=53234123 //Should be the access key id to the storage
 OBJECTSTORAGE_SECRET_ACCESS_KEY=0000000 //Should be the secret access key to the storage
 OBJECTSTORAGE_DEFAULT_REGION=usc1 //Should match the subdomain in endpoint or url
 OBJECTSTORAGE_BUCKET=bucketName //The name of the bucket
