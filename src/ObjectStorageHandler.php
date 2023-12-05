@@ -52,6 +52,17 @@ class ObjectStorageHandler
         );
     }
 
+    public static function putImage($folder, $content, $fileName = "", $width = null, $height = null)
+    {
+        static::check();
+        if(!is_null($width) || !is_null($height)){
+            imageresolution($content, $width, $height);
+        }
+        return Utils::isNullOrEmpty($fileName) ? Storage::disk(static::$disk)->put($folder, $content) : Storage::disk(static::$disk)->putFileAs(
+            $folder, $content, $fileName
+        );
+    }
+
     public static function get($path): string|null
     {
         static::check();
