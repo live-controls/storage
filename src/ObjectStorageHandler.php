@@ -3,7 +3,6 @@
 namespace LiveControls\Storage;
 
 use Exception;
-use GdImage;
 use Illuminate\Support\Facades\Storage;
 use LiveControls\Utils\Utils;
 
@@ -57,12 +56,9 @@ class ObjectStorageHandler
     {
         static::check();
         if(!is_null($width) && !is_null($height)){
-            if($content instanceof GdImage){
-                $img = $content;
-            }else{
-                $fContent = file_get_contents($content->getRealPath());
-                $img = imagecreatefromstring($fContent);
-            }
+            //This will most likely only work with a file uploaded with livewire, not sure if this would work with plain laravel
+            $fContent = file_get_contents($content->getRealPath());
+            $img = imagecreatefromstring($fContent);
             $img = imagescale($img, $width, $height);
             imagejpeg($img, $content->getRealPath());
         }
