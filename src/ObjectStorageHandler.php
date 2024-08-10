@@ -2,6 +2,7 @@
 
 namespace LiveControls\Storage;
 
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Storage;
 use LiveControls\Utils\Utils;
@@ -41,18 +42,18 @@ class ObjectStorageHandler
         return Storage::disk(static::$disk)->exists($path);
     }
 
-    public static function put($folder, $content, $fileName = "")
+    public static function put($folder, $content, $fileName = "", bool $private = true)
     {
         static::check();
         if(Utils::isNullOrEmpty($fileName)){
-            return Storage::disk(static::$disk)->put($folder, $content);
+            return Storage::disk(static::$disk)->put($folder, $content, ($private ? 'private' : 'public'));
         }
         return Storage::disk(static::$disk)->putFileAs(
             $folder, $content, $fileName
         );
     }
 
-    public static function putImage($folder, $content, $fileName = "", $width = null, $height = null)
+    public static function putImage($folder, $content, $fileName = "", $width = null, $height = null, bool $private = true)
     {
         static::check();
         if(!is_null($width) && !is_null($height)){
@@ -62,8 +63,24 @@ class ObjectStorageHandler
             $img = imagescale($img, $width, $height);
             imagejpeg($img, $content->getRealPath());
         }
-        return Utils::isNullOrEmpty($fileName) ? Storage::disk(static::$disk)->put($folder, $content) : Storage::disk(static::$disk)->putFileAs(
-            $folder, $content, $fileName
+        return Utils::isNullOrEmpty($fileName) ? Storage::disk(static::$disk)->put($folder, $content, ($private ? 'private' : 'public')) : Storage::disk(static::$disk)->putFileAs(
+            $folder, $content, $fileName, ($private ? 'private' : 'public')
+        );
+    }
+
+    public static function url($path): string|null
+    {
+        static::check();
+        return Storage::disk(static::$disk)->url($path);
+    }
+
+    public static function temporaryUrl($path, Carbon $expire, array $parameters = [])
+    {
+        static::check();
+        return Storage::disk(static::$disk)->temporaryUrl(
+            $path,
+            $expire,
+            $parameters
         );
     }
 
