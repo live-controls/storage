@@ -4,6 +4,7 @@ namespace LiveControls\Storage;
 
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use LiveControls\Storage\Models\DbDisk;
 use LiveControls\Utils\Utils;
@@ -12,7 +13,7 @@ class FluentObjectStorageHandler
 {
     protected $disk;
 
-    protected static function disk(array|string|int|DbDisk $config = 's3'): FluentObjectStorageHandler
+    protected static function disk(array|string|int|DbDisk|Model $config = 's3'): FluentObjectStorageHandler
     {
         if(is_integer($config)){
             $config = DbDisk::find($config,[
@@ -32,7 +33,7 @@ class FluentObjectStorageHandler
                 throw new Exception('Invalid DbDisk with Id '.$config);
             }
             $config = $config->toArray();
-        }elseif($config instanceof DbDisk){
+        }elseif($config instanceof Model){
             $config = $config->only([
                 'driver',
                 'root',
@@ -47,6 +48,7 @@ class FluentObjectStorageHandler
                 'visibility'
             ]);
         }
+
         $osh = new FluentObjectStorageHandler();
         $osh->disk = is_array($config) ? Storage::build($config) : $osh->disk = Storage::disk($config);
         return $osh;
