@@ -15,6 +15,7 @@ class CreateDbDiskTable extends Migration
     {
         Schema::create(config('livecontrols_storage.storage_disk','dbdisks'), function (Blueprint $table) {
             $table->id();
+            $table->string('name');
             $table->string('driver');
             $table->string('root');
             $table->boolean('throw');

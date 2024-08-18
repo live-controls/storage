@@ -10,6 +10,7 @@ class DbDisk extends Model
     use HasFactory;
 
     protected $fillable = [
+        'name',
         'driver',
         'root',
         'throw',
