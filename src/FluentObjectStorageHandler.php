@@ -11,7 +11,7 @@ use LiveControls\Utils\Utils;
 
 class FluentObjectStorageHandler
 {
-    protected $disk;
+    public $disk;
 
     public static function disk(array|string|int|DbDisk|Model $config = 's3'): FluentObjectStorageHandler
     {
@@ -54,12 +54,12 @@ class FluentObjectStorageHandler
         return $osh;
     }
 
-    protected function exists($path): bool
+    public function exists($path): bool
     {
         return $this->disk->exists($path);
     }
 
-    protected function put($folder, $content, $fileName = "", bool $private = true): bool|string
+    public function put($folder, $content, $fileName = "", bool $private = true): bool|string
     {
         if(Utils::isNullOrEmpty($fileName)){
             return $this->disk->put($folder, $content, ($private ? 'private' : 'public'));
@@ -69,7 +69,7 @@ class FluentObjectStorageHandler
         );
     }
 
-    protected function putImage($folder, $content, $fileName = "", $width = null, $height = null, bool $private = true): bool|string
+    public function putImage($folder, $content, $fileName = "", $width = null, $height = null, bool $private = true): bool|string
     {
         if(!is_null($width) && !is_null($height)){
             //This will most likely only work with a file uploaded with livewire, not sure if this would work with plain laravel
@@ -83,12 +83,12 @@ class FluentObjectStorageHandler
         );
     }
 
-    protected function url($path): string|null
+    public function url($path): string|null
     {
         return $this->disk->url($path);
     }
 
-    protected function temporaryUrl($path, Carbon $expire, array $parameters = [])
+    public function temporaryUrl($path, Carbon $expire, array $parameters = [])
     {
         return $this->disk->temporaryUrl(
             $path,
@@ -97,22 +97,22 @@ class FluentObjectStorageHandler
         );
     }
 
-    protected function get($path): string|null
+    public function get($path): string|null
     {
         return $this->disk->get($path);
     }
 
-    protected function delete(string|array $paths): bool
+    public function delete(string|array $paths): bool
     {
         return $this->disk->delete($paths);
     }
 
-    protected function download($path, $name = null, $headers = [])
+    public function download($path, $name = null, $headers = [])
     {
         return $this->disk->download($path, $name, $headers);
     }
 
-    protected function baseImage($path): string|null
+    public function baseImage($path): string|null
     {
         $content = $this->get($path);
         if(is_null($content)){
