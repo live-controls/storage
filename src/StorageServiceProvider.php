@@ -16,5 +16,14 @@ class StorageServiceProvider extends ServiceProvider
     $this->publishes([
       __DIR__.'/../config/config.php' => config_path('livecontrols_storage.php'),
     ], 'livecontrols.storage.config');
+
+    if ($this->app->runningInConsole()) {
+      if (! class_exists('CreateDbDiskTable')) {
+        $this->publishes([
+          __DIR__ . '/../database/migrations/create_dbdisk_table.php.stub' => database_path('migrations/' . date('Y_m_d_His', time()) . '_create_dbdisk_table.php'),
+          // you can add any number of migrations here
+        ], 'migrations');
+      }
+    }
   }
 }

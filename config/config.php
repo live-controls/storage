@@ -1,5 +1,6 @@
 <?php
 
 return [
-    'storage_disk' => null
+    'storage_disk' => null,
+    'dbdisk_table' => 'dbdisks'
 ];

@@ -19,7 +19,10 @@ composer require live-controls/storage
 ```
 
 ## Setup FluentObjectStorageHandler
-No Setup needed
+1) If you want to use DBDisks, create the migration like this:
+```
+php artisan vendor:publish --provider="LiveControls\Storage\StorageServiceProvider" --tag="migrations"
+```
 
 ## Setup ObjectStorageHandler
 1) Add to .env:
