@@ -18,8 +18,10 @@ None
 composer require live-controls/storage
 ```
 
+## Setup FluentObjectStorageHandler
+No Setup needed
 
-## Setup
+## Setup ObjectStorageHandler
 1) Add to .env:
 ```
 OBJECTSTORAGE_ACCESS_KEY_ID=53234123 //Should be the access key id to the storage
