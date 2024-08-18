@@ -11,10 +11,11 @@ class FluentObjectStorageHandler
 {
     protected $disk;
 
-    protected function disk(array|string $config = 's3')
+    protected static function disk(array|string $config = 's3'): FluentObjectStorageHandler
     {
-        $this->disk = is_array($config) ? Storage::build($config) : $this->disk = Storage::disk($config);
-        return $this;
+        $osh = new FluentObjectStorageHandler();
+        $osh->disk = is_array($config) ? Storage::build($config) : $osh->disk = Storage::disk($config);
+        return $osh;
     }
 
     protected function exists($path): bool
