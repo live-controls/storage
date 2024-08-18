@@ -7,6 +7,9 @@ use Exception;
 use Illuminate\Support\Facades\Storage;
 use LiveControls\Utils\Utils;
 
+/**
+ * @deprecated v1.2.1 Use LiveControls\Storage\FluentObjectStorageHandler instead
+ */
 class ObjectStorageHandler
 {
     protected static $disk;
