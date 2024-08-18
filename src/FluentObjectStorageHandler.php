@@ -13,7 +13,7 @@ class FluentObjectStorageHandler
 {
     protected $disk;
 
-    protected static function disk(array|string|int|DbDisk|Model $config = 's3'): FluentObjectStorageHandler
+    public static function disk(array|string|int|DbDisk|Model $config = 's3'): FluentObjectStorageHandler
     {
         if(is_integer($config)){
             $config = DbDisk::find($config,[
