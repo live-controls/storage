@@ -50,7 +50,7 @@ class FluentObjectStorageHandler
         }
 
         $osh = new FluentObjectStorageHandler();
-        $osh->disk = is_array($config) ? Storage::build($config) : $osh->disk = Storage::disk($config);
+        $osh->disk = is_array($config) ? Storage::build($config) : Storage::disk($config);
         return $osh;
     }
 
