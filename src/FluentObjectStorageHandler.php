@@ -5,6 +5,8 @@ namespace LiveControls\Storage;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use LiveControls\Storage\Models\DbDisk;
 use LiveControls\Utils\Utils;
@@ -12,6 +14,40 @@ use LiveControls\Utils\Utils;
 class FluentObjectStorageHandler
 {
     public $disk;
+
+    /**
+     * Mirrors the content from one disk to another
+     *
+     * @param array|string|integer|DbDisk|Model $configFrom The configuration form the disk the content comes from
+     * @param array|string|integer|DbDisk|Model $configTo THe configuration from the disk the content goes to
+     * @param string $directory The directory the search should start, if recursive is true this will be the only directory mirrored
+     * @param boolean $recursive Should the search be recursive?
+     * @param boolean $log If set to true, Log::*() will be called
+     * @return void
+     */
+    public static function mirror(array|string|int|DbDisk|Model $configFrom, array|string|int|DbDisk|Model $configTo, string $directory = "/", bool $recursive = true, bool $log = false)
+    {
+        $diskFrom = static::disk($configFrom)->disk;
+        $diskTo = static::disk($configTo)->disk;
+        foreach ($diskFrom->files($directory) as $file) {
+            $sizeTo = $diskTo->size($file);
+            $sizeFrom = $diskFrom->size($file);
+            if ($diskTo->exists($file) && $sizeTo != $sizeFrom) {
+                $diskTo->delete($file);
+                Log::debug("Removed file \"".$file."\" because its size (".$sizeFrom."/".$sizeTo.") is different");
+            }
+            if (!$diskTo->exists($file)) {
+                $diskTo->writeStream($file, $diskFrom->readStream($file));
+                Log::debug("Mirrored file \"".$file."\"");
+            }
+        }
+        if($recursive){
+            foreach ($diskFrom->directories($directory) as $dir) {
+                static::mirror($configFrom, $configTo, $dir, $recursive, $log);
+                Log::debug("Start recursive mirroring for directory \"".$dir."\"");
+            }
+        }
+    }
 
     public static function disk(array|string|int|DbDisk|Model $config = 's3'): FluentObjectStorageHandler
     {
