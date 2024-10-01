@@ -38,8 +38,8 @@ class FluentObjectStorageHandler
                     $diskTo->delete($file);
                     Log::debug("Removed file \"".$file."\" because its size (".$sizeFrom."/".$sizeTo.") is different");
                 }
-            }  
-            
+            }
+
             if (!$diskTo->exists($file)) {
                 $diskTo->put($file, $diskFrom->readStream($file), $diskFrom->getVisibility($file));
                 $filesMirrored++;
@@ -131,7 +131,7 @@ class FluentObjectStorageHandler
 
     public function putImageFromUrl(string $folder, string $url, ?string $fileName = "", ?int $width, ?int $height, bool $private): bool|string
     {
-        $content = file_get_contents($url);
+        $content = $url;
         if(is_null($fileName)){
             $fileName = substr($url, strrpos($url,'/') + 1);
         }
