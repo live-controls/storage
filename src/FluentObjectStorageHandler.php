@@ -119,7 +119,11 @@ class FluentObjectStorageHandler
             $fContent = is_string($content) ? $content : file_get_contents($content->getRealPath());
             $img = imagecreatefromstring($fContent);
             $img = imagescale($img, $width, $height);
-            imagejpeg($img, $content->getRealPath());
+            if(!is_string($content)){
+                imagejpeg($img, $content->getRealPath());
+            }else{
+                $content = $img;
+            }
         }
         return Utils::isNullOrEmpty($fileName) ? $this->disk->put($folder, $content, ($private ? 'private' : 'public')) : $this->disk->putFileAs(
             $folder, $content, $fileName, ($private ? 'private' : 'public')
