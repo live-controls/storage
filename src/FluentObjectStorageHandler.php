@@ -116,7 +116,7 @@ class FluentObjectStorageHandler
     {
         if(!is_null($width) && !is_null($height)){
             //This will most likely only work with a file uploaded with livewire, not sure if this would work with plain laravel
-            $fContent = file_get_contents($content->getRealPath());
+            $fContent = is_string($content) ? $content : file_get_contents($content->getRealPath());
             $img = imagecreatefromstring($fContent);
             $img = imagescale($img, $width, $height);
             imagejpeg($img, $content->getRealPath());
