@@ -23,10 +23,11 @@ class FluentObjectStorageHandler
      * @param string $directory The directory the search should start, if recursive is true this will be the only directory mirrored
      * @param boolean $recursive Should the search be recursive?
      * @param boolean $log If set to true, Log::*() will be called
-     * @return void
+     * @return int Amount of files changed
      */
-    public static function mirror(array|string|int|DbDisk|Model $configFrom, array|string|int|DbDisk|Model $configTo, string $directory = "/", bool $recursive = true, bool $log = false)
+    public static function mirror(array|string|int|DbDisk|Model $configFrom, array|string|int|DbDisk|Model $configTo, string $directory = "/", bool $recursive = true, bool $log = false): int
     {
+        $filesMirrored = 0;
         $diskFrom = static::disk($configFrom)->disk;
         $diskTo = static::disk($configTo)->disk;
         foreach ($diskFrom->files($directory) as $file) {
@@ -38,15 +39,17 @@ class FluentObjectStorageHandler
             }
             if (!$diskTo->exists($file)) {
                 $diskTo->writeStream($file, $diskFrom->readStream($file));
+                $filesMirrored++;
                 Log::debug("Mirrored file \"".$file."\"");
             }
         }
         if($recursive){
             foreach ($diskFrom->directories($directory) as $dir) {
-                static::mirror($configFrom, $configTo, $dir, $recursive, $log);
+                $filesMirrored += static::mirror($configFrom, $configTo, $dir, $recursive, $log);
                 Log::debug("Start recursive mirroring for directory \"".$dir."\"");
             }
         }
+        return $filesMirrored;
     }
 
     public static function disk(array|string|int|DbDisk|Model $config = 's3'): FluentObjectStorageHandler
