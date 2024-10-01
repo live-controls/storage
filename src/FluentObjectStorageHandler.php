@@ -31,12 +31,16 @@ class FluentObjectStorageHandler
         $diskFrom = static::disk($configFrom)->disk;
         $diskTo = static::disk($configTo)->disk;
         foreach ($diskFrom->files($directory) as $file) {
-            $sizeTo = $diskTo->size($file) ?? 0;
-            $sizeFrom = $diskFrom->size($file) ?? 1;
-            if ($diskTo->exists($file) && $sizeTo != $sizeFrom) {
-                $diskTo->delete($file);
-                Log::debug("Removed file \"".$file."\" because its size (".$sizeFrom."/".$sizeTo.") is different");
+            if($diskTo->exists($file)){
+                $sizeTo = $diskTo->size($file);
+                $sizeFrom = $diskFrom->size($file);
+                if ($sizeTo != $sizeFrom) {
+                    $diskTo->delete($file);
+                    Log::debug("Removed file \"".$file."\" because its size (".$sizeFrom."/".$sizeTo.") is different");
+                }
             }
+            
+            
             if (!$diskTo->exists($file)) {
                 $diskTo->writeStream($file, $diskFrom->readStream($file));
                 $filesMirrored++;
