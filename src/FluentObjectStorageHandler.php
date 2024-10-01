@@ -38,11 +38,10 @@ class FluentObjectStorageHandler
                     $diskTo->delete($file);
                     Log::debug("Removed file \"".$file."\" because its size (".$sizeFrom."/".$sizeTo.") is different");
                 }
-            }
-            
+            }  
             
             if (!$diskTo->exists($file)) {
-                $diskTo->writeStream($file, $diskFrom->readStream($file));
+                $diskTo->put($file, $diskFrom->readStream($file), $diskFrom->getVisibility($file));
                 $filesMirrored++;
                 Log::debug("Mirrored file \"".$file."\"");
             }
@@ -102,17 +101,44 @@ class FluentObjectStorageHandler
         return $this->disk->exists($path);
     }
 
+    /**
+     * Puts the content to the storage server from an Url
+     *
+     * @param string $folder The folder the file should be saved to
+     * @param string $url The url the file comes from
+     * @param ?string $fileName The filename, if set to null the filename will be taken from the url
+     * @param boolean $private If file access should be private or public
+     * @return boolean|string
+     */
+    public function putFromUrl(string $folder, string $url, ?string $fileName = "", bool $private): bool|string
+    {
+        $content = file_get_contents($url);
+        if(is_null($fileName)){
+            $fileName = substr($url, strrpos($url,'/') + 1);
+        }
+        return static::put($folder, $content, $fileName, $private);
+    }
+
     public function put($folder, $content, $fileName = "", bool $private = true): bool|string
     {
         if(Utils::isNullOrEmpty($fileName)){
             return $this->disk->put($folder, $content, ($private ? 'private' : 'public'));
         }
         return $this->disk->putFileAs(
-            $folder, $content, $fileName
+            $folder, $content, $fileName, ($private ? 'private' : 'public')
         );
     }
 
-    public function putImage($folder, $content, $fileName = "", $width = null, $height = null, bool $private = true): bool|string
+    public function putImageFromUrl(string $folder, string $url, ?string $fileName = "", ?int $width, ?int $height, bool $private): bool|string
+    {
+        $content = file_get_contents($url);
+        if(is_null($fileName)){
+            $fileName = substr($url, strrpos($url,'/') + 1);
+        }
+        return static::putImage($folder, $content, $fileName, $width, $height, $private);
+    }
+
+    public function putImage($folder, $content, $fileName = "", ?int $width = null, ?int $height = null, bool $private = true): bool|string
     {
         if(!is_null($width) && !is_null($height)){
             //This will most likely only work with a file uploaded with livewire, not sure if this would work with plain laravel
