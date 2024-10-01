@@ -116,14 +116,10 @@ class FluentObjectStorageHandler
     {
         if(!is_null($width) && !is_null($height)){
             //This will most likely only work with a file uploaded with livewire, not sure if this would work with plain laravel
-            $fContent = is_string($content) ? $content : file_get_contents($content->getRealPath());
+            $fContent = file_get_contents($content->getRealPath());
             $img = imagecreatefromstring($fContent);
             $img = imagescale($img, $width, $height);
-            if(!is_string($content)){
-                imagejpeg($img, $content->getRealPath());
-            }else{
-                $content = $img;
-            }
+            imagejpeg($img, $content->getRealPath());
         }
         return Utils::isNullOrEmpty($fileName) ? $this->disk->put($folder, $content, ($private ? 'private' : 'public')) : $this->disk->putFileAs(
             $folder, $content, $fileName, ($private ? 'private' : 'public')
