@@ -63,3 +63,6 @@ php artisan vendor:publish --tag="livecontrols.storage.config"
 
 ## Usage
 Todo
+
+## Hint
+To use it with big files, use fopen($fName, 'r+') and not file_get_contents($fName)
