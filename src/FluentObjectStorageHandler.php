@@ -129,7 +129,7 @@ class FluentObjectStorageHandler
         );
     }
 
-    public function putImageFromUrl(string $folder, string $url, ?string $fileName = "", ?int $width, ?int $height, bool $private): bool|string
+    public function putImageFromUrl(string $folder, string $url, ?string $fileName = "", ?int $width = null, ?int $height = null, bool $private = true): bool|string
     {
         $content = $url;
         if(is_null($fileName)){
