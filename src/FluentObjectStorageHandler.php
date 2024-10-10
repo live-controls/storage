@@ -110,7 +110,7 @@ class FluentObjectStorageHandler
      * @param boolean $private If file access should be private or public
      * @return boolean|string
      */
-    public function putFromUrl(string $folder, string $url, ?string $fileName = "", bool $private): bool|string
+    public function putFromUrl(string $folder, string $url, ?string $fileName = "", bool $private = true): bool|string
     {
         $content = file_get_contents($url);
         if(is_null($fileName)){
