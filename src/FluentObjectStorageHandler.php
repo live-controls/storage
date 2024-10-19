@@ -91,6 +91,8 @@ class FluentObjectStorageHandler
             ]);
         }
 
+        $config['directory_separator'] = config('livecontrols_storage.directory_separator', '/');
+
         $osh = new FluentObjectStorageHandler();
         $osh->disk = is_array($config) ? Storage::build($config) : Storage::disk($config);
         return $osh;

@@ -2,5 +2,6 @@
 
 return [
     'storage_disk' => null,
-    'dbdisk_table' => 'dbdisks'
+    'dbdisk_table' => 'dbdisks',
+    'directory_separator' => '/'
 ];
