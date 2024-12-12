@@ -131,6 +131,11 @@ class FluentObjectStorageHandler
         );
     }
 
+    public function putFile($folder, $content, bool $private = true): string|false
+    {
+        return $this->disk->putFile($folder, $content, ($private ? 'private' : 'public'));
+    }
+    
     public function putImageFromUrl(string $folder, string $url, ?string $fileName = "", ?int $width = null, ?int $height = null, bool $private = true): bool|string
     {
         $content = $url;
