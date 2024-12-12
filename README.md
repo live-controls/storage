@@ -66,4 +66,4 @@ Todo
 
 ## Hint
 - To use it with big files, use fopen($fName, 'r+') and not file_get_contents($fName)
-- If you are, for whatever reason, need to change the directory separator to something else than a forwards slahs, change the "directory_separator" inside the configuration file. But you normally wouldn't want to do this, because it would break the temporaryUrl return value.
+- If you, for whatever reason, need to change the directory separator to something else than a forwards slash, change the "directory_separator" inside the configuration file. But you normally wouldn't want to do this, because it would break the temporaryUrl return value.
