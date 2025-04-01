@@ -183,6 +183,21 @@ class FluentObjectStorageHandler
         return $this->disk->delete($paths);
     }
 
+    public function deleteDirectory(string|array $directories): bool
+    {
+        if(!is_array($directories))
+        {
+            $directories = [$directories];
+        }
+        foreach($directories as $directory)
+        {
+            if(!$this->disk->deleteDirectory($directory)){
+                return false;
+            }
+        }
+        return true;
+    }
+
     public function download($path, $name = null, $headers = [])
     {
         return $this->disk->download($path, $name, $headers);
