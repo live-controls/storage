@@ -183,8 +183,9 @@ class FluentObjectStorageHandler
         return $this->disk->delete($paths);
     }
 
-    public function deleteDirectory(string|array $directories): bool
+    public function deleteDirectory(string|array $directories, bool $continue = true): bool
     {
+        $didFail = false;
         if(!is_array($directories))
         {
             $directories = [$directories];
@@ -192,10 +193,13 @@ class FluentObjectStorageHandler
         foreach($directories as $directory)
         {
             if(!$this->disk->deleteDirectory($directory)){
-                return false;
+                $didFail = true;
+                if($continue === false){
+                    return false;
+                }
             }
         }
-        return true;
+        return !$didFail;
     }
 
     public function download($path, $name = null, $headers = [])
