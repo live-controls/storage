@@ -116,7 +116,7 @@ class FluentObjectStorageHandler
     {
         $content = file_get_contents($url);
         if(is_null($fileName)){
-            $fileName = basename($url, "?" . PATHINFO_FILENAME);
+            $fileName = strtok(basename($url, "?" . PATHINFO_FILENAME), '?');
         }
         return static::put($folder, $content, $fileName, $private);
     }
@@ -140,7 +140,7 @@ class FluentObjectStorageHandler
     {
         $content = $url;
         if(is_null($fileName)){
-            $fileName = basename($url, "?" . PATHINFO_FILENAME);
+            $fileName = strtok(basename($url, "?" . PATHINFO_FILENAME), '?');
         }
         return static::putImage($folder, $content, $fileName, $width, $height, $private);
     }
