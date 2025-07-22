@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use LiveControls\Storage\Models\DbDisk;
 use LiveControls\Utils\Utils;
+use Illuminate\Support\Str;
 
 class FluentObjectStorageHandler
 {
@@ -142,6 +143,12 @@ class FluentObjectStorageHandler
         if(is_null($fileName)){
             $fileName = strtok(basename($url, "?" . PATHINFO_FILENAME), '?');
         }
+        
+        if(Utils::isNullOrEmpty($fileName)){
+            //Generate filename
+            $fileExtension = Utils::getExtensionFromUrl($url);
+            $fileName = Str::random(4).'-'.Str::uuid().'.'.$fileExtension;
+        }
         return static::putImage($folder, $content, $fileName, $width, $height, $private);
     }
 
@@ -156,7 +163,7 @@ class FluentObjectStorageHandler
      * @param boolean $private
      * @return string|false
      */
-    public function putImage(string $folder, mixed $content, string $fileName = "", ?int $width = null, ?int $height = null, bool $private = true): string|false
+    public function putImage(string $folder, mixed $content, string $fileName, ?int $width = null, ?int $height = null, bool $private = true): string|false
     {
         if(!is_null($width) && !is_null($height)){
             //This will most likely only work with a file uploaded with livewire, not sure if this would work with plain laravel
@@ -165,7 +172,7 @@ class FluentObjectStorageHandler
             $img = imagescale($img, $width, $height);
             imagejpeg($img, $content->getRealPath());
         }
-        return Utils::isNullOrEmpty($fileName) ? $this->putFile($folder, $content, $private) : $this->disk->putFileAs(
+        return $this->disk->putFileAs(
             $folder, $content, $fileName, ($private ? 'private' : 'public')
         );
     }
