@@ -145,7 +145,18 @@ class FluentObjectStorageHandler
         return static::putImage($folder, $content, $fileName, $width, $height, $private);
     }
 
-    public function putImage($folder, $content, $fileName = "", ?int $width = null, ?int $height = null, bool $private = true): bool|string
+    /**
+     * Stores an image to the storage disk and returns its path or false if it failed
+     *
+     * @param string $folder
+     * @param mixed $content
+     * @param string $fileName
+     * @param integer|null $width
+     * @param integer|null $height
+     * @param boolean $private
+     * @return string|false
+     */
+    public function putImage(string $folder, mixed $content, string $fileName = "", ?int $width = null, ?int $height = null, bool $private = true): string|false
     {
         if(!is_null($width) && !is_null($height)){
             //This will most likely only work with a file uploaded with livewire, not sure if this would work with plain laravel
@@ -154,7 +165,7 @@ class FluentObjectStorageHandler
             $img = imagescale($img, $width, $height);
             imagejpeg($img, $content->getRealPath());
         }
-        return Utils::isNullOrEmpty($fileName) ? $this->disk->put($folder, $content, ($private ? 'private' : 'public')) : $this->disk->putFileAs(
+        return Utils::isNullOrEmpty($fileName) ? $this->putFile($folder, $content, $private) : $this->disk->putFileAs(
             $folder, $content, $fileName, ($private ? 'private' : 'public')
         );
     }
